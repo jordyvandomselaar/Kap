@@ -5,7 +5,6 @@ import PCancelable from 'p-cancelable';
 import tempy from 'tempy';
 import path from 'path';
 
-import {track} from '../common/analytics';
 import {conditionalArgs, extractProgressFromStderr} from './utils';
 import {settings} from '../common/settings';
 
@@ -52,9 +51,8 @@ const createProcess = (mode: Mode) => {
 
     const modeName = Mode[mode];
     const trackConversionEvent = (eventName: string) => {
-      if (shouldTrack) {
-        track(`file/export/${modeName}/${eventName}`);
-      }
+      // Noop
+      console.log(`${modeName} ${eventName} ${shouldTrack}`);
     };
 
     return new PCancelable<string>((resolve, reject, onCancel) => {

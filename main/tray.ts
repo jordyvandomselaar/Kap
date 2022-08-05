@@ -3,7 +3,6 @@
 import {Tray} from 'electron';
 import path from 'path';
 import {getCogMenu} from './menus/cog';
-import {track} from './common/analytics';
 import {openFiles} from './utils/open-files';
 import {windowManager} from './windows/manager';
 
@@ -21,7 +20,7 @@ export const initializeTray = () => {
   tray.on('click', openCropperWindow);
   tray.on('right-click', openContextMenu);
   tray.on('drop-files', (_, files) => {
-    track('editor/opened/tray');
+    console.log('editor/opened/tray');
     openFiles(...files);
   });
 

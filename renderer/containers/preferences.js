@@ -23,7 +23,7 @@ export default class PreferencesContainer extends Container {
     this.settings.shortcuts = shortcuts;
     this.systemPermissions = this.remote.require('./common/system-permissions');
     this.plugins = this.remote.require('./plugins').plugins;
-    this.track = this.remote.require('./common/analytics').track;
+    this.track = console.log;
     this.showError = this.remote.require('./utils/errors').showError;
 
     const pluginsInstalled = this.plugins.installedPlugins.sort((a, b) => a.prettyName.localeCompare(b.prettyName));

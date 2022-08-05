@@ -48,7 +48,7 @@ export const settings = new Store<Settings>({
     },
     allowAnalytics: {
       type: 'boolean',
-      default: true
+      default: false
     },
     showCursor: {
       type: 'boolean',

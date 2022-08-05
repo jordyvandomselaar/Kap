@@ -13,7 +13,6 @@ import {settings} from './common/settings';
 import {plugins} from './plugins';
 import {initializeTray} from './tray';
 import {initializeDevices} from './utils/devices';
-import {initializeAnalytics, track} from './common/analytics';
 import {initializeGlobalAccelerators} from './global-accelerators';
 import {openFiles} from './utils/open-files';
 import {hasMicrophoneAccess, ensureScreenCapturePermissions} from './common/system-permissions';
@@ -34,7 +33,7 @@ app.on('open-file', (event, path) => {
   event.preventDefault();
 
   if (app.isReady()) {
-    track('editor/opened/running');
+    console.log('editor/opened/running');
     openFiles(path);
   } else {
     filesToOpen.push(path);
@@ -96,7 +95,6 @@ const checkForUpdates = () => {
   // Ensure all plugins are up to date
   initializePlugins();
   initializeDevices();
-  initializeAnalytics();
   initializeTray();
   initializeGlobalAccelerators();
   setUpExportsListeners();
@@ -106,7 +104,7 @@ const checkForUpdates = () => {
   }
 
   if (filesToOpen.length > 0) {
-    track('editor/opened/startup');
+    console.log('editor/opened/startup');
     openFiles(...filesToOpen);
     hasActiveRecording();
   } else if (

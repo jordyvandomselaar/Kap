@@ -2,7 +2,6 @@ import {windowManager} from './windows/manager';
 import {setRecordingTray, disableTray, resetTray} from './tray';
 import {setCropperShortcutAction} from './global-accelerators';
 import {settings} from './common/settings';
-import {track} from './common/analytics';
 import {plugins} from './plugins';
 import {getAudioDevices, getSelectedInputDeviceId} from './utils/devices';
 import {showError} from './utils/errors';
@@ -131,7 +130,7 @@ export const startRecording = async (options: StartRecordingOptions) => {
 
   for (const {service, plugin} of recordingPlugins) {
     serviceState.set(service.title, {persistedState: {}});
-    track(`plugins/used/record/${plugin.name}`);
+    console.log(`plugins/used/record/${plugin.name}`);
   }
 
   await callPlugins('willStartRecording');
@@ -146,7 +145,7 @@ export const startRecording = async (options: StartRecordingOptions) => {
       plugins: serializeEditPluginState()
     });
   } catch (error) {
-    track('recording/stopped/error');
+    console.log('recording/stopped/error');
     showError(error as any, {title: 'Recording error', plugin: undefined});
     past = undefined;
     cleanup();
@@ -155,9 +154,9 @@ export const startRecording = async (options: StartRecordingOptions) => {
 
   const startTime = (Date.now() - past) / 1000;
   if (startTime > 3) {
-    track(`recording/started/${startTime}`);
+    console.log(`recording/started/${startTime}`);
   } else {
-    track('recording/started');
+    console.log('recording/started');
   }
 
   console.log(`Started recording after ${startTime}s`);
@@ -170,7 +169,7 @@ export const startRecording = async (options: StartRecordingOptions) => {
   aperture.recorder.catch((error: any) => {
     // Make sure it doesn't catch the error of ending the recording
     if (past) {
-      track('recording/stopped/error');
+      console.log('recording/stopped/error');
       showError(error, {title: 'Recording error', plugin: undefined});
       past = undefined;
       cleanup();
@@ -195,7 +194,7 @@ export const stopRecording = async () => {
   try {
     filePath = await aperture.stopRecording();
   } catch (error) {
-    track('recording/stopped/error');
+    console.log('recording/stopped/error');
     showError(error as any, {title: 'Recording error', plugin: undefined});
     cleanup();
     return;
@@ -204,7 +203,7 @@ export const stopRecording = async () => {
   try {
     cleanup();
   } finally {
-    track('editor/opened/recording');
+    console.log('editor/opened/recording');
 
     const recording = new Recording({
       filePath,
